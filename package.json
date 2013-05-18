@@ -1,0 +1,26 @@
+{
+    "name": "jclass",
+    "preferGlobal": false,
+    "version": "0.1",
+    "author": "Marcel Rieger <marcelrieger@me.com>",
+    "description": "Advanced JavaScript Inheritance with private members based on Jon Resig's Inheritance Class",
+    "main": "./lib/jclass.min",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/riga/jclass.git"
+    },
+    "keywords": [
+        "john",
+        "resig",
+        "javascript",
+        "inheritance",
+        "class",
+        "private",
+        "members"
+    ],
+    "dependencies" : {},
+    "license": "MIT",
+    "engines": {
+        "node": ">=0.6"
+    }
+}
