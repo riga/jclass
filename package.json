@@ -3,7 +3,7 @@
     "preferGlobal": false,
     "version": "0.1.1",
     "author": "Marcel Rieger <marcelrieger@me.com>",
-    "description": "Advanced JavaScript Inheritance with private members based on Jon Resig's Inheritance Class",
+    "description": "Advanced JavaScript Inheritance with private members based on John Resig's Inheritance Class",
     "main": "./lib/jclass.min",
     "repository": {
         "type": "git",
