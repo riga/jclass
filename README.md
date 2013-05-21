@@ -109,7 +109,7 @@ var SubClass = JClass.extend(properties [, options]);
 `ctor`, `super`, `privatePattern` and `privateName` in order to keep the prototype/inheritence model
 consistent!
 
-### `JClass.noConflict()`
+#### `JClass.noConflict()`
 Use this method when `JClass` interfers with your code. It returns a reference to the `JClass` base
 object and resets the `JClass` variable to its initial value.
 
