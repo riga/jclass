@@ -1,7 +1,7 @@
 {
     "name": "jclass",
     "preferGlobal": false,
-    "version": "0.2.2",
+    "version": "0.2.3",
     "author": "Marcel Rieger <marcelrieger@me.com>",
     "description": "Advanced JavaScript Inheritance with private members based on John Resig's Inheritance Class.",
     "main": "./lib/jclass.min",
