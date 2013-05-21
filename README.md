@@ -20,7 +20,7 @@ npm install jclass
 
 For web browsers:
 
-```javascript
+```html
 <script src="/path/to/jclass.min.js"></script>
 ```
 
