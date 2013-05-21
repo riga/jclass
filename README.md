@@ -40,8 +40,7 @@ var SubClass = JClass.extend(properties [, options]);
 ```
 * [`properties`](https://github.com/riga/jclass/blob/master/lib/jclass.js#L101)
 \- (Object, *mandatory*)
-\- An object that defines the methods of your class. See [John Resig's Simple Inheritance]
-(http://ejohn.org/blog/simple-javascript-inheritance/) technique for more details.
+\- An object that defines the methods of your class. See [John Resig's Simple Inheritance](http://ejohn.org/blog/simple-javascript-inheritance/) technique for more details.
 
 * [`options`](https://github.com/riga/jclass/blob/master/lib/jclass.js#L101)
 \- (Object, *optional*)
