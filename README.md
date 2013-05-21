@@ -2,6 +2,8 @@
 
 Advanced JavaScript Inheritance with **private members** based on *John Resig's Inheritance Class*
 
+https://npmjs.org/package/jclass
+
 
 ## Synopsis
 
