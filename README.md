@@ -1,13 +1,76 @@
-# **jclass**
+# **JClass**
 
-*Advanced JavaScript Inheritance with __private members__ based on [John Resig's Inheritance Class](http://ejohn.org/blog/simple-javascript-inheritance/)*
+*Advanced JavaScript inheritance model providing __genuine private members__ based on [John Resig's Inheritance Class](http://ejohn.org/blog/simple-javascript-inheritance/)*
 
 https://npmjs.org/package/jclass
 
 
 ## Synopsis
 
-TODO
+JClass is a lightweight and flexible JavaScript inheritance model providing **genuine private
+members** using closures. It's applicable in nodejs and normal web browsers. JClass is
+implemented using `prototype`'s and brings along multiple features like e.g. propper (and even
+inheritance consistent)`instanceof` calls. To come straight to the point:
+
+```javascript
+var Animal = JClass.extend({
+
+    // the constructor method
+    init: function(name) {
+        // a public value
+        this.name = name;
+    },
+
+    // a public method
+    eat: function() {
+        return this.name + ' eats';
+    },
+
+    // a private method, indicated by 2 leading underscores
+    __behave: function() {
+        return this.name + ' behaves';
+    }
+});
+
+// inherit from 'Animal'
+var Cat = Animal.extend({
+
+    init: function(name, color) {
+        // call 'init' of the super-class
+        this._super(name);
+        this.color = color;
+
+        // a private value, indicated by 2 leading underscores
+        this.__lives = 9;
+    },
+
+    // overwrite 'eat'
+    eat: function() {
+        var msg = this.__behave();
+        // 'this._super' references Animal's 'eat' method
+        return msg + ' because ' + this._super() + ' fish';
+    },
+
+    // getter for '__lives'
+    getLives: function() {
+        return this.__lives;
+    }
+});
+
+var simon = new Cat('simon', 'white');
+console.log(simon instanceof Cat);    // true
+console.log(simon instanceof JClass); // true
+
+console.log(simon.name);       // 'simon'
+console.log(simon.__behave()); // TypeError: Object has no method '__behave'
+console.log(simon.eat());      // 'simon behaves because simon eats fish'
+console.log(simon.__lives);    // undefined
+console.log(simon.getLives()); // 9
+```
+This little example shows only the basics. It's even possible to customize and optimize JClass for
+the various needs of your code by using [`options`](https://github.com/riga/jclass#options) (e.g.
+you can change the naming scheme of private members). Take a look at the [examples](https://github.com/riga/jclass#examples)
+to get a picture of what is possible and how it's working.
 
 
 ## Installation
@@ -27,7 +90,7 @@ For web browsers:
 
 ## Examples
 
-TODO
+IN PROGRESS
 
 
 ## Configuration
