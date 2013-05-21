@@ -70,7 +70,7 @@ var SubClass = JClass.extend(properties [, options]);
     * [`privatePattern`](https://github.com/riga/jclass/blob/master/lib/jclass.js#L307)
     \- (RegExp, *default:* **/\_\_.+/**)
     \- A [regular expression](http://en.wikipedia.org/wiki/Regular_expression) that defines how your
-    private members look like. /\_\_.+/` would find `__fooFn` but not `_barFn`. Null means that
+    private members look like. `/__.+/` would find `__fooFn` but not `_barFn`. Null means that
     there will be no private members.
 
     * [`privateName`](https://github.com/riga/jclass/blob/master/lib/jclass.js#L155)
@@ -90,17 +90,17 @@ var SubClass = JClass.extend(properties [, options]);
     they match the 'privatePattern') won't be private (`this.__foo` in our example).
 
     * [`methodsKey`](https://github.com/riga/jclass/blob/master/lib/jclass.js#L177)
-    \- (String, *default:* **'\_\_jcMethods\_\_'**)
+    \- (String, *default:* **'\_jcMethods'**)
     \- The name of the object that holds all private methods during a method call. *Note*: you only
     need to change this value in case of a name collision with your code.
 
     * [`depthKey`](https://github.com/riga/jclass/blob/master/lib/jclass.js#L124)
-    \- (String, *default:* **'\_\_jcDepth\_\_'**)
+    \- (String, *default:* **'\_jcDepth'**)
     \- The name of the depth value (0 for JClass, 1 for the first derived class, 2 for the second
     ...). *Note*: you only need to change this value in case of a name collision with your code.
 
     * [`callerDepthKey`](https://github.com/riga/jclass/blob/master/lib/jclass.js#L161)
-    \- (String, *default:* **'\_\_jcCallerDepth\_\_'**)
+    \- (String, *default:* **'\_jcCallerDepth'**)
     \- The name of the depth value of the initial caller. *Note*: you only need to change this value
     in case of a name collision with your code.
 
