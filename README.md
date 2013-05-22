@@ -90,8 +90,198 @@ For web browsers:
 
 ## Examples
 
-IN PROGRESS
+### Calling `_super` methods
 
+```javascript
+var Vehicle = JClass.extend({
+    init: function(type) {
+        this.type = type;
+    },
+
+    drive: function() {
+        return 'driving';
+    }
+});
+
+var Car = Vehicle.extend({
+    init: function(color) {
+        // call the super 'init'
+        this._super('car');
+        this.color = color;
+    },
+
+    drive: function() {
+        // call the super 'drive'
+        return this._super() + ' on 4 tires';
+    }
+});
+
+var myCar = new Car('red');
+
+console.log(myCar.drive()); // 'driving on 4 tires'
+```
+
+### Private members and the private object
+
+```javascript
+var Vehicle = JClass.extend({
+    init: function(type, price) {
+        this.type = type;
+
+        // a private value, indicated by 2 leading underscores
+        // because 'privatePattern' is /__.*/ by default
+        this.__price = price
+
+        // a private value using the 'private object'
+        this.__.consumption = 'too much';
+    },
+
+    // a private method
+    __drive: function() {
+        return 'driving';
+    }
+});
+
+var Car = Vehicle.extend({
+    init: function(color, price) {
+        this._super('car', price);
+        this.color = color;
+    },
+
+    // a getter for 'this.__price'
+    getPrice: function() {
+        return this.__price;
+    },
+
+    forceDrive: function() {
+        return this.__drive();
+    }
+});
+
+var myCar = new Car('red', 10000);
+
+console.log(myCar.__price);        // undefined
+console.log(myCar.getPrice());     // 10000
+console.log(myCar.__.consumption); // undefined
+console.log(myCar.__drive());      // TypeError: Object has no method '__drive'
+console.log(myCar.forceDrive());   // 'driving'
+```
+
+### Disable `tracking`
+
+```javascript
+var opts = {
+    tracking: false
+};
+
+var Vehicle = JClass.extend({
+    init: function(type, price) {
+        this.type = type;
+
+        // won't be private since there is no tracking
+        this.__price = price
+    },
+
+    // still a private method since it was known
+    // before the first method call
+    __drive: function() {
+        return 'driving';
+    }
+}, opts); // note the second parameter
+
+var Car = Vehicle.extend({
+    init: function(color, price) {
+        this._super('car', price);
+        this.color = color;
+    },
+
+    forceDrive: function() {
+        return this.__drive();
+    }
+});
+
+var myCar = new Car('red', 10000);
+
+console.log(myCar.__price);      // 10000
+console.log(myCar.__drive());    // TypeError: Object has no method '__drive'
+console.log(myCar.forceDrive()); // 'driving'
+```
+
+### Final classes using `extendable`
+
+```javascript
+var opts = {
+    extendable: false
+};
+
+var Vehicle = JClass.extend({
+    init: function(type) {
+        this.type = type;
+
+        // a private value
+        this.__secret = 'yay!';
+    }
+
+}, opts); // note the second parameter
+
+var CarHack = Vehicle.extend({
+    init: function() {
+        this._super('car');
+    },
+
+    // try to get the '__secret'
+    getSecret: function() {
+        return this.__secret;
+    }
+});
+
+// 'CarHack' won't be assigned since 'Vehicle' cannot be subclassed anymore
+```
+
+### Changing keys
+
+```javascript
+var opts = {
+    ctorName      : 'ctor',         // the constructor name
+    superName     : '_parent',      // the super method name
+    privatePattern: '/^__.+__$/',   // the naming scheme
+    privateName   : '_private'      // the name of the private object
+};
+
+var Vehicle = JClass.extend({
+    ctor: function(type) {
+        this.type = type;
+
+        // a private value
+        this.__secret__ = 'yay!';
+
+        // a private value using the 'private object'
+        this._private.foo = 'bar';
+    },
+
+    // a private method
+    __drive__: function() {
+        return 'driving';
+    }
+});
+
+var Car = Vehicle.extend({
+    ctor: function(color) {
+        // call the super 'init'
+        this._parent('car');
+        this.color = color;
+    },
+
+    tellSecrets: function() {
+        return this.__drive__() + ' ' + this.__secret__;
+    }
+});
+
+var myCar = newCar('red');
+
+console.log(myCar.tellSecrets()); // 'driving yay!'
+
+```
 
 ## Configuration
 
@@ -131,9 +321,9 @@ var SubClass = JClass.extend(properties [, options]);
     below).
 
     * [`privatePattern`](https://github.com/riga/jclass/blob/master/lib/jclass.js#L307)
-    \- (RegExp, *default:* **/\_\_.+/**)
+    \- (RegExp, *default:* **/^\_\_.+/**)
     \- A [regular expression](http://en.wikipedia.org/wiki/Regular_expression) that defines how your
-    private members look like. `/__.+/` would find `__fooFn` but not `_barFn`. Null means that
+    private members look like. `/^__.+/` would find `__fooFn` but not `_barFn`. Null means that
     there will be no private members.
 
     * [`privateName`](https://github.com/riga/jclass/blob/master/lib/jclass.js#L155)
@@ -153,17 +343,17 @@ var SubClass = JClass.extend(properties [, options]);
     they match the 'privatePattern') won't be private (`this.__foo` in our example).
 
     * [`methodsKey`](https://github.com/riga/jclass/blob/master/lib/jclass.js#L177)
-    \- (String, *default:* **'\_jcMethods'**)
+    \- (String, *default:* **'\_jcMethods\_'**)
     \- The name of the object that holds all private methods during a method call. *Note*: you only
     need to change this value in case of a name collision with your code.
 
     * [`depthKey`](https://github.com/riga/jclass/blob/master/lib/jclass.js#L124)
-    \- (String, *default:* **'\_jcDepth'**)
+    \- (String, *default:* **'\_jcDepth\_'**)
     \- The name of the depth value (0 for JClass, 1 for the first derived class, 2 for the second
     ...). *Note*: you only need to change this value in case of a name collision with your code.
 
     * [`callerDepthKey`](https://github.com/riga/jclass/blob/master/lib/jclass.js#L161)
-    \- (String, *default:* **'\_jcCallerDepth'**)
+    \- (String, *default:* **'\_jcCallerDepth\_'**)
     \- The name of the depth value of the initial caller. *Note*: you only need to change this value
     in case of a name collision with your code.
 
