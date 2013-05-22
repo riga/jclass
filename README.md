@@ -185,8 +185,8 @@ var Vehicle = JClass.extend({
         this.__.consumption = 'too much';
     },
 
-    // still a private method since it was known
-    // before the first method call
+    // still a private method since tracking does not affect methods
+    // (methods are kown before the first method call)
     __drive: function() {
         return 'driving';
     }
