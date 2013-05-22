@@ -180,6 +180,9 @@ var Vehicle = JClass.extend({
 
         // won't be private since there is no tracking
         this.__price = price
+        
+        // values of the 'private object' stay private though!
+        this.__.consumption = 'too much';
     },
 
     // still a private method since it was known
