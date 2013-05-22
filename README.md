@@ -361,7 +361,7 @@ var SubClass = JClass.extend(properties [, options]);
     in case of a name collision with your code.
 
 **Please note:** when extending an existing class, please use identical values for the options
-`ctor`, `super`, `privatePattern` and `privateName` in order to keep the prototype/inheritence model
+`ctorName`, `superName`, `privatePattern` and `privateName` in order to keep the prototype/inheritence model
 consistent!
 
 #### `JClass.noConflict()`
