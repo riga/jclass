@@ -280,7 +280,7 @@ var Car = Vehicle.extend({
     }
 });
 
-var myCar = newCar('red');
+var myCar = new Car('red');
 
 console.log(myCar.tellSecrets()); // 'driving yay!'
 
