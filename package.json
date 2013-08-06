@@ -1,7 +1,7 @@
 {
     "name": "jclass",
     "preferGlobal": false,
-    "version": "0.2.4",
+    "version": "0.2.5",
     "author": "Marcel Rieger <marcelrieger@me.com>",
     "description": "Advanced JavaScript inheritance model providing genuine private members based on John Resig's Inheritance Class.",
     "main": "./lib/jclass.min",
@@ -19,7 +19,7 @@
         "members"
     ],
     "dependencies" : {},
-    "license": "MIT",
+    "license": "MIT/GPLv2",
     "engines": {
         "node": ">=0.6"
     }
