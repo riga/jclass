@@ -301,18 +301,18 @@ var SubClass = JClass.extend(properties [, options]);
 * [`options`](https://github.com/riga/jclass/blob/master/lib/jclass.js#L101)
 \- (Object, *optional*)
 \- An object containing
-    * [`extendable`](https://github.com/riga/jclass/blob/master/lib/jclass.js#L345)
+    * [`extendable`](https://github.com/riga/jclass/blob/master/lib/jclass.js#L343)
     \- (Boolean, *default:* **true**)
     \- When true, another subclass can inherit from this class. When false, this class cannot be
     subclassed (e.g. like [`final` classes in Java](http://en.wikipedia.org/wiki/Final_(Java))).
 
-    * [`ctorName`](https://github.com/riga/jclass/blob/master/lib/jclass.js#L335)
+    * [`ctorName`](https://github.com/riga/jclass/blob/master/lib/jclass.js#L332)
     \- (String, *default:* **'init'**)
     \- The name of the method that is invoked when a new instance of your class is created via
     `new MyClass()`. All passed arguments are applied to this method (OO speaking: the constructor's
     name).
 
-    * [`superName`](https://github.com/riga/jclass/blob/master/lib/jclass.js#L149)
+    * [`superName`](https://github.com/riga/jclass/blob/master/lib/jclass.js#L146)
     \- (String, *default:* **'\_super'**)
     \- The name of the methods of the super-class.
     When you call (e.g.) `this._super()` in your `init` method, the `init` method of the super-class
@@ -323,13 +323,13 @@ var SubClass = JClass.extend(properties [, options]);
     \- When false, this is equivalent to `privatePattern = null` plus `privateName = null` (see
     below).
 
-    * [`privatePattern`](https://github.com/riga/jclass/blob/master/lib/jclass.js#L307)
+    * [`privatePattern`](https://github.com/riga/jclass/blob/master/lib/jclass.js#L305)
     \- (RegExp, *default:* **/^\_\_.+/**)
     \- A [regular expression](http://en.wikipedia.org/wiki/Regular_expression) that defines how your
     private members look like. `/^__.+/` would find `__fooFn` but not `_barFn`. Null means that
     there will be no private members.
 
-    * [`privateName`](https://github.com/riga/jclass/blob/master/lib/jclass.js#L155)
+    * [`privateName`](https://github.com/riga/jclass/blob/master/lib/jclass.js#L153)
     \- (String, *default:* **'\_\_'**)
     \- In addition to values/methods that match the `privatePattern`, another private object named
     `privateName` is visible in every method's scope. In some cases, you may use this object instead
@@ -345,7 +345,7 @@ var SubClass = JClass.extend(properties [, options]);
     `privateName` to reduce the number of comparisons. *Note*: when false, all non-methods (even if
     they match the 'privatePattern') won't be private (`this.__foo` in our example).
 
-    * [`methodsKey`](https://github.com/riga/jclass/blob/master/lib/jclass.js#L177)
+    * [`methodsKey`](https://github.com/riga/jclass/blob/master/lib/jclass.js#L175)
     \- (String, *default:* **'\_jcMethods\_'**)
     \- The name of the object that holds all private methods during a method call. *Note*: you only
     need to change this value in case of a name collision with your code.
