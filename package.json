@@ -4,7 +4,7 @@
     "version": "0.2.5",
     "author": "Marcel Rieger <marcelrieger@me.com>",
     "description": "Advanced JavaScript inheritance model providing genuine private members based on John Resig's Inheritance Class.",
-    "main": "./lib/jclass.min",
+    "main": "./lib/jclass",
     "repository": {
         "type": "git",
         "url": "https://github.com/riga/jclass.git"
