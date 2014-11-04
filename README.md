@@ -1,5 +1,7 @@
 # jclass
 
+![](https://nodei.co/npm/jclass.png?downloads=True&stars=True)
+
 *jclass* started as a port of John Resig's lightweight OO inheritance model. However, this implementation is
 faster as it avoids threefold method wrapping (see [here](http://techblog.netflix.com/2014/05/improving-performance-of-our-javascript.html)). In addition, it provides class members, various conveniences and conversion of prototype-based classes.
 
