@@ -5,7 +5,7 @@
 *jclass* started as a port of John Resig's lightweight OO inheritance model. However, this implementation is
 faster as it avoids threefold method wrapping (see [here](http://techblog.netflix.com/2014/05/improving-performance-of-our-javascript.html)). In addition, it provides class members, various conveniences and conversion of prototype-based classes.
 
-*jclass* has no dependencies and works in most common module environments:
+*jclass* has no dependencies and works in most import environments:
 RequireJS (AMD), CommonJS, NodeJs and web browsers.
 
 **Note:** The current version (1.X.X) is a merge of the [node-oo](https://github.com/riga/node-oo) project and the previous version of *jclass* (0.2.X). For legacy code, see the [v0.2.X branch](https://github.com/riga/jclass/tree/v0.2.X).
