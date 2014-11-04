@@ -1,2 +1,5 @@
 *.sublime-project
 *.sublime-workspace
+test
+build
+node_modules
