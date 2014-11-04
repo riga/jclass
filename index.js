@@ -1,10 +1,9 @@
 /*!
- * jclass v1.0.0
+ * jclass v1.0.1
  * https://github.com/riga/jclass
  *
  * Marcel Rieger, 2014
- * MIT licensed
- * http://www.opensource.org/licenses/mit-license
+ * MIT licensed, http://www.opensource.org/licenses/mit-license
  */
 
 (function(factory) {
@@ -119,10 +118,10 @@
     Class._extend = SuperClass._extend;
 
     // propagate instance members directly to the created protoype
-    var key;
+    var key, member, superMember;
     for (key in instanceMembers) {
-      var member      = instanceMembers[key];
-      var superMember = superPrototype[key];
+      member      = instanceMembers[key];
+      superMember = superPrototype[key];
 
       // simply set the member
       prototype[key] = member;
@@ -177,7 +176,7 @@
       // ensure that the init function is not overwritten
       if (key === "init") return;
 
-      // member mapping
+      // member mapping, unfortunately we cannot avoid method wrapping here
       member = cls.prototype[key];
       instanceMembers[key] = !isFn(member) ? member : (function(fn) {
         return function() {

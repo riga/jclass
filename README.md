@@ -2,8 +2,7 @@
 
 ![](https://nodei.co/npm/jclass.png?downloads=True&stars=True)
 
-*jclass* started as a port of John Resig's lightweight OO inheritance model. However, this implementation is
-faster as it avoids threefold method wrapping (see [here](http://techblog.netflix.com/2014/05/improving-performance-of-our-javascript.html)). In addition, it provides class members, various conveniences and conversion of prototype-based classes.
+*jclass* started as a port of [John Resig's lightweight OO inheritance model](http://ejohn.org/blog/simple-javascript-inheritance/). However, this implementation is faster as it avoids threefold method wrapping (see [here](http://techblog.netflix.com/2014/05/improving-performance-of-our-javascript.html)). In addition, it provides class members, various conveniences and conversion of prototype-based classes.
 
 *jclass* has no dependencies and works in most import environments:
 RequireJS (AMD), CommonJS, NodeJs and web browsers.
@@ -70,6 +69,7 @@ var grumpy = new GrumpyCat();
 grumpy.meow(); // "Nah, not in the mood."
 grumpy.getColor(); // "greyish", same as grumpy.color
 
+// instanceof works as expected
 console.log(grumpy instanceof GrumpyCat); // true
 console.log(grumpy instanceof Cat); // true
 console.log(GrumpyCat._extends(Cat)); // true, same as GrumpyCat._superClass == Cat
@@ -80,10 +80,14 @@ console.log(GrumpyCat._extends(Class)); // true
 
 #### Class members
 
+Class members are accessible via the ``_members`` property which is itself a jclass instance. To add class members,
+add a second paramter to ``_extend``.
+
 ```javascript
 var Class = require("jclass");
 
 var Cat = Class._extend({
+  // instance members
 
   // constructor
   init: function(color) {
@@ -96,8 +100,10 @@ var Cat = Class._extend({
   }
 
 }, {
+  // class members
+
   family: "Felidae",
-  
+
   getFamily: function() {
     console.log(this.family);
     // same as
