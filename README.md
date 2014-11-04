@@ -6,7 +6,7 @@ faster as it avoids threefold method wrapping (see [here](http://techblog.netfli
 *jclass* has no dependencies and works in most common module environments:
 RequireJS (AMD), CommonJS, NodeJs and web browsers.
 
-**Note:** The current version (1.X.X) is a merge of the [node-oo](https://github.com/riga/node-oo) project and the previous version of *jclass* (0.2.X). For legacy code, see the [v0.2.X branch](https://github.com/riga/jclass/tree).  
+**Note:** The current version (1.X.X) is a merge of the [node-oo](https://github.com/riga/node-oo) project and the previous version of *jclass* (0.2.X). For legacy code, see the [v0.2.X branch](https://github.com/riga/jclass/tree/v0.2.X).
 
 ## Installation
 
