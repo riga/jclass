@@ -1,5 +1,5 @@
 /*!
- * jclass v1.1.0
+ * jclass v1.1.1
  * https://github.com/riga/jclass
  *
  * Marcel Rieger, 2014
@@ -161,7 +161,7 @@
     // in any hierarchy, e.g. every class inherits "Class" itself
     Class._extends = function(target) {
       if (this._superClass == BaseClass) return false;
-      if (target == this._superClass) return true;
+      if (target == this._superClass || target == BaseClass) return true;
       return this._superClass._extends(target);
     };
 
