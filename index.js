@@ -1,5 +1,5 @@
 /*!
- * jclass v1.1.1
+ * jclass v1.1.2
  * https://github.com/riga/jclass
  *
  * Marcel Rieger, 2014
@@ -172,28 +172,14 @@
   // converts arbitrary protoype-style classes to our Class definition
   BaseClass._convert = function(cls, options) {
 
-    // create properties, starting with the init function required by Class
-    var instanceMembers = {
-      init: function() {
-        // simply create an instance of our target class
-        this._prototype = BaseClass._construct(cls, arguments);
-      }
+    // the properties consist of the class' prototype
+    var instanceMembers = cls.prototype;
+
+    // add the constructor function
+    instanceMembers.init = function() {
+      // simply create an instance of our target class
+      this._origin = BaseClass._construct(cls, arguments);
     };
-
-    // create wrappers for all members and bind them
-    var key, member;
-    for (key in cls.prototype) {
-      // ensure that the init function is not overwritten
-      if (key === "init") return;
-
-      // member mapping, unfortunately we cannot avoid method wrapping here
-      member = cls.prototype[key];
-      instanceMembers[key] = !isFn(member) ? member : (function(fn) {
-        return function() {
-          return fn.apply(this._prototype, arguments);
-        };
-      })(member);
-    }
 
     // finally, create and return our new class
     return BaseClass._extend(instanceMembers, {}, options);

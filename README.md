@@ -145,7 +145,7 @@ console.log(myInstance.someKey); // "some value"
 
 #### Converting Prototyped Classes
 
-You can convert prototype-base classes into jclasses.
+You can convert prototype-base classes into jclasses. This approach supports constructor arguments.
 
 ```javascript
 // example using nodejs
@@ -161,7 +161,7 @@ emitter.emit("topic", ...);
 });
 ```
 
-The instance of the (original) prototyped class is stored as ``_prototype`` in each jclass instance.
+The instance of the (original) prototyped class is stored as ``_origin`` in each jclass instance.
 
 
 ## API
