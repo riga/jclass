@@ -1,80 +1,143 @@
-var Class = require("../index.js");
+var assert = require("assert"),
+    Class  = require("../index.js");
 
+
+// initialize objects to test
 var Cat = Class._extend({
+  // instance members
 
   init: function(color) {
     this.color = color;
-    this.sleepCounter = 0;
+
+    this.sleeping = false;
   },
 
   meow: function() {
-    console.log("An abstract cat cannot meow!");
+    // an abstract cat cannot meow
+    throw new Error("not implemented");
   },
 
   sleep: function() {
-    this.sleepCounter++;
-    return this;
+    this.sleeping = true;
   }
+
 }, {
+  // class members
+
   family: "Felidae"
+
 });
 
 var Lion = Cat._extend({
+  // instance members
 
   init: function() {
     this.init._super.call(this, "sandy");
   },
 
   meow: function() {
-    console.log("Roooaaar!");
+    return "Roooaaar!";
   },
 
-  sleep: function() {
-    this.sleep._super.call(this);
-
-    // a lion sleeps again after he slept
-    this.sleepCounter++;
-
-    return this;
-  }
 }, {
+  // class members
+
   getFamily: function() {
-    // return Lion._members.family;
-    // same as
     return this.family;
+    // same as
+    // return Lion._members.family;
   }
 });
 
-
-
-var cat = new Cat();
+var cat  = new Cat();
 var lion = new Lion();
 
-[cat, lion].forEach(function(c) {
-  c.meow();
+
+// begin tests
+describe("Inheritance", function() {
+
+  describe("#attribute", function() {
+    it("should return the color of lion", function() {
+      assert.equal("sandy", lion.color);
+    });
+  });
+
+  describe("#class-members-1", function() {
+    it("should return the family of Cat", function() {
+      assert.equal("Felidae", Cat._members.family);
+    });
+  });
+
+  describe("#class-members-2", function() {
+    it("should return the family of Lion", function() {
+      assert.equal("Felidae", Lion._members.family);
+    });
+  });
+
+  describe("#class-members-3", function() {
+    it("should return undefined", function() {
+      assert.equal(undefined, Cat._members.getFamily);
+    });
+  });
+
+  describe("#class-members-4", function() {
+    it("should return the family of Lion", function() {
+      assert.equal("Felidae", Lion._members.getFamily());
+    });
+  });
+
+  describe("#sub-class-1", function() {
+    it("should return the true if Cat is in Class' subclasses", function() {
+      assert.equal(true, !!~Class._subClasses.indexOf(Cat));
+    });
+  });
+
+  describe("#extends-1", function() {
+    it("should return true if Lion extends Class", function() {
+      assert.equal(true, Lion._extends(Class));
+    });
+  });
+
+  describe("#extends-2", function() {
+    it("should return true if Lion extends Cat", function() {
+      assert.equal(true, Lion._extends(Cat));
+    });
+  });
+
+  describe("#extends-3", function() {
+    it("should return true if Lion extends Cat", function() {
+      assert.equal(true, Lion._superClass == Cat);
+    });
+  });
+
+  describe("#extends-4", function() {
+    it("should return false if Cat does not extend Lion", function() {
+      assert.equal(false, Cat._extends(Lion));
+    });
+  });
+
+  describe("#instanceof-1", function() {
+    it("should return true if cat is an instance of Cat", function() {
+      assert.equal(true, cat instanceof Cat);
+    });
+  });
+
+  describe("#instanceof-2", function() {
+    it("should return true if cat is an instance of Cat", function() {
+      assert.equal(true, cat._class == Cat);
+    });
+  });
+
+  describe("#instanceof-3", function() {
+    it("should return true if lion is an instance of Cat", function() {
+      assert.equal(true, lion instanceof Cat);
+    });
+  });
+
+  describe("#instanceof-4", function() {
+    it("should return true if cat is not an instance of Lion", function() {
+      assert.equal(true, !(cat instanceof Lion));
+    });
+  });
+
 });
-
-console.log("\nValue Checks:\n-------------");
-
-console.log("sandy", lion.color);
-console.log("Felidae", Cat._members.family);
-console.log("Felidae", Lion._members.family);
-console.log(undefined, Cat._members.getFamily);
-console.log("Felidae", Lion._members.getFamily());
-console.log(true, Class._subClasses[0] == Cat);
-console.log(true, Class._subClasses[1] == Cat._members._class);
-console.log(undefined, Class._subClasses[2]);
-console.log(true, Lion._extends(Cat));
-console.log(true, Lion._superClass == Cat);
-console.log(true, cat._class == Cat);
-
-
-console.log("\nSpeed Tests:\n-------------");
-
-var t1 = (new Date()).getTime();
-for (var i = 0; i < 10000000; ++i) {
-  lion.sleep();
-}
-var t2 = (new Date()).getTime();
-console.log("time:", t2-t1);
-console.log(lion.sleepCounter);
