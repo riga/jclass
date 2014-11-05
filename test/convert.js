@@ -1,10 +1,10 @@
 var EventEmitter = require("events").EventEmitter;
 
-var JClass = require("../index.js");
+var Class = require("../index.js");
 
 EventEmitter.prototype.someMember = 123;
 
-var Emitter = JClass._convert(EventEmitter);
+var Emitter = Class._convert(EventEmitter);
 
 var e = new Emitter();
 

@@ -2,7 +2,7 @@
 
 ![](https://nodei.co/npm/jclass.png?downloads=True&stars=True)
 
-*jclass* started as a port of [John Resig's lightweight OO inheritance model](http://ejohn.org/blog/simple-javascript-inheritance/). However, this implementation is faster as it avoids threefold method wrapping (see [here](http://techblog.netflix.com/2014/05/improving-performance-of-our-javascript.html)). In addition, it provides class members, various conveniences and conversion of prototype-based classes.
+*jclass* started as a port of [John Resig's lightweight OO inheritance model](http://ejohn.org/blog/simple-javascript-inheritance/). However, this implementation is faster as it avoids threefold method wrapping (see [here](http://techblog.netflix.com/2014/05/improving-performance-of-our-javascript.html)). In addition, it provides class members, property descriptors, conversion of prototype-based classes and various conveniences.
 
 *jclass* has no dependencies and works in most import environments:
 RequireJS (AMD), CommonJS, NodeJs and web browsers.
@@ -19,6 +19,8 @@ npm install jclass
 
 
 ## Examples
+
+All examples below use NodeJs but the *jclass* related code would also work in other environments.
 
 #### Simple Inheritance
 
@@ -74,7 +76,6 @@ console.log(grumpy instanceof GrumpyCat); // true
 console.log(grumpy instanceof Cat); // true
 console.log(GrumpyCat._extends(Cat)); // true, same as GrumpyCat._superClass == Cat
 console.log(GrumpyCat._extends(Class)); // true
-
 ```
 
 
@@ -109,12 +110,37 @@ var Cat = Class._extend({
     // same as
     // console.log(Cat._members.family);
   }
+
 });
 
 Cat._members.getFamily()); // "Felidae", same as Cat._members.family
 ```
 
 **Please note** that ``this`` within class methods references the ``_members`` instance itself.
+
+
+#### Property Descriptors
+
+All instance and class members given to ``_extend`` can also be applied as property descriptors that are passed to [``Object.defineProperty``](https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty). All you need to do is define members as objects and add a property ``descriptor: true``. Both, accessor-type and data-type descriptors are supported.
+
+```javascript
+var Class = require("jclass");
+
+var MyClass = Class._extend({
+
+  someKey: {
+    descriptor: true,
+    get: function() {
+      return "some value";
+    }
+  }
+
+});
+
+var myInstance = new MyClass();
+console.log(myInstance.someKey); // "some value"
+
+```
 
 
 #### Converting Prototyped Classes
@@ -124,7 +150,7 @@ You can convert prototype-base classes into jclasses.
 ```javascript
 // example using nodejs
 
-var Class        = require("node-oo");
+var Class        = require("jclass");
 var EventEmitter = require("events").EventEmitter;
 
 var Emitter = Class._convert(EventEmitter);
@@ -133,7 +159,6 @@ var emitter = new Emitter();
 emitter.on("topic", function() { ... });
 emitter.emit("topic", ...);
 });
-
 ```
 
 The instance of the (original) prototyped class is stored as ``_prototype`` in each jclass instance.

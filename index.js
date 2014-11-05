@@ -1,5 +1,5 @@
 /*!
- * jclass v1.0.1
+ * jclass v1.1.0
  * https://github.com/riga/jclass
  *
  * Marcel Rieger, 2014
@@ -36,6 +36,9 @@
   };
   var isObj = function(obj) {
     return typeof obj === "object";
+  };
+  var isDescr = function(obj) {
+    return isObj(obj) && obj.descriptor === true;
   };
   var extend = function(target) {
     var objs = Array.prototype.slice.call(arguments, 1);
@@ -118,18 +121,25 @@
     Class._extend = SuperClass._extend;
 
     // propagate instance members directly to the created protoype
+    // the member is either a normal member or a descriptor
     var key, member, superMember;
     for (key in instanceMembers) {
-      member      = instanceMembers[key];
-      superMember = superPrototype[key];
+      member = instanceMembers[key];
 
-      // simply set the member
-      prototype[key] = member;
+      if (isDescr(member)) {
+        // descriptor -> define the property
+        Object.defineProperty(prototype, key, member);
 
-      // if both member and superMember are distinct functions
-      // add the superMember to the member as "_super"
-      if (isFn(member) && isFn(superMember) && member !== superMember) {
-        member._super = superMember;
+      } else {
+        // normal member -> simple assignment
+        prototype[key] = member;
+
+        // if both member and the super member are distinct functions
+        // add the super member to the member as "_super"
+        superMember = superPrototype[key];
+        if (isFn(member) && isFn(superMember) && member !== superMember) {
+          member._super = superMember;
+        }
       }
     }
 
