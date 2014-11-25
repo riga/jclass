@@ -1,5 +1,5 @@
 /*!
- * jclass v1.1.2
+ * jclass v1.1.3
  * https://github.com/riga/jclass
  *
  * Marcel Rieger, 2014
@@ -177,8 +177,22 @@
 
     // add the constructor function
     instanceMembers.init = function() {
+      var self = this;
+
       // simply create an instance of our target class
       this._origin = BaseClass._construct(cls, arguments);
+
+      // add properties for each own property in _origin
+      Object.keys(this._origin).forEach(function(key) {
+        if (!self._origin.hasOwnProperty(key)) {
+          return;
+        }
+        Object.defineProperty(self, key, {
+          get: function() {
+            return self._origin[key];
+          }
+        });
+      });
     };
 
     // finally, create and return our new class
