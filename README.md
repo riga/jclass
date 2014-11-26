@@ -52,9 +52,6 @@ var GrumpyCat = Cat._extend({
   // constructor
   init: function init() {
     init._super.call(this, "greyish");
-    
-	// if you don't want to use a named function you can also use
-	// this.init._super.call(this, "greyish");
   },
 
   // instance method
@@ -189,12 +186,9 @@ All instances have the following attributes:
 
 - ``_class`` (``Class``): The class of this instance
 
-Within instance methods, the *super* method is always referenced as ``_super``. 
+Within instance methods, the *super* method is always referenced as ``_super``. You can access them by making your instance method a named function ([example](#simple-inheritance)).
 
 If the option ``exposeClassMembers`` is ``true``, each instance can directly access class members **within instance methods**. You can use the ``_class`` attribute outside of instance methods or if ``exposeClassMembers`` is ``false``.
-
-
-
 
 
 ## Development
