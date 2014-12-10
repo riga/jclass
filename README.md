@@ -118,7 +118,7 @@ Cat._members.getFamily()); // "Felidae", same as Cat._members.family
 
 #### Property Descriptors
 
-All instance and class members given to ``_extend`` can also be applied as property descriptors that are passed to [``Object.defineProperty``](https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty). All you need to do is define members as objects and add a property ``descriptor: true``. Both, accessor-type and data-type descriptors are supported.
+All instance and class members given to ``_extend`` can also be applied as property descriptors that are passed to [``Object.defineProperty``](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty). All you need to do is define members as objects and add a property ``descriptor: true``. Both, accessor-type and data-type descriptors are supported.
 
 ```javascript
 var Class = require("jclass");
