@@ -188,8 +188,6 @@ All instances have the following attributes:
 
 Within instance methods, the *super* method is always referenced as ``_super``. You can access them by making your instance method a named function ([example](#simple-inheritance)).
 
-If the option ``exposeClassMembers`` is ``true``, each instance can directly access class members **within instance methods**. You can use the ``_class`` attribute outside of instance methods or if ``exposeClassMembers`` is ``false``.
-
 
 ## Development
 
