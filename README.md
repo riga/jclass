@@ -25,9 +25,9 @@ All examples below use NodeJs but the *jclass* related code would also work in o
 #### Simple Inheritance
 
 ```javascript
-var Class = require("jclass");
+var JClass = require("jclass");
 
-var Cat = Class._extend({
+var Cat = JClass._extend({
 
   // constructor
   init: function(color) {
@@ -72,7 +72,7 @@ grumpy.getColor(); // "greyish", same as grumpy.color
 console.log(grumpy instanceof GrumpyCat); // true
 console.log(grumpy instanceof Cat); // true
 console.log(GrumpyCat._extends(Cat)); // true, same as GrumpyCat._superClass == Cat
-console.log(GrumpyCat._extends(Class)); // true
+console.log(GrumpyCat._extends(JClass)); // true
 ```
 
 
@@ -82,9 +82,9 @@ Class members are accessible via the ``_members`` property which is itself a jcl
 add a second paramter to ``_extend``.
 
 ```javascript
-var Class = require("jclass");
+var JClass = require("jclass");
 
-var Cat = Class._extend({
+var Cat = JClass._extend({
   // instance members
 
   // constructor
@@ -121,9 +121,9 @@ Cat._members.getFamily()); // "Felidae", same as Cat._members.family
 All instance and class members given to ``_extend`` can also be applied as property descriptors that are passed to [``Object.defineProperty``](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty). All you need to do is define members as objects and add a property ``descriptor: true``. Both, accessor-type and data-type descriptors are supported.
 
 ```javascript
-var Class = require("jclass");
+var JClass = require("jclass");
 
-var MyClass = Class._extend({
+var MyClass = JClass._extend({
 
   someKey: {
     descriptor: true,
@@ -147,10 +147,10 @@ You can convert prototype-base classes into jclasses. This approach supports con
 ```javascript
 // example using nodejs
 
-var Class        = require("jclass");
+var JClass       = require("jclass");
 var EventEmitter = require("events").EventEmitter;
 
-var Emitter = Class._convert(EventEmitter);
+var Emitter = JClass._convert(EventEmitter);
 
 var emitter = new Emitter();
 emitter.on("topic", function() { ... });
@@ -167,24 +167,24 @@ The instance of the (original) prototyped class is stored as ``_origin`` in each
 
 Classes have the following attributes:
 
-- ``_extend`` (``function(instanceMembers, classMembers)``): Derives a new class with ``instanceMembers`` and ``classMembers`` ([example](#simple-inheritance)).
-- ``_extends`` (``function(Class)``): Returns ``true`` (``false``) if ``Class`` is (is not) **a** super class.
-- ``_superClass`` (``Class``): The super class (not available for the base ``Class``).
-- ``_subClasses`` (``array``): An array containing all (**directly inheriting**) sub classes.
-- ``_members`` (``Class instance``): A jclass instance that handles the class members ([example](#class-members)).
+- ``_extend(instanceMembers, classMembers)``: Derives a new class with *instanceMembers* and *classMembers* ([example](#simple-inheritance)).
+- ``_extends(JClass)``: Returns *true* (*false*) if ``JClass`` is (is not) a super class.
+- ``_superClass``: The super class (not available for the base ``JClass``).
+- ``_subClasses``: An array containing all (**directly inheriting**) sub classes.
+- ``_members``: A jclass instance holding the class members ([example](#class-members)).
 
 
-The base ``Class`` has additional attributes that are not propagated to derived classes:
+The base ``JClass`` has additional attributes that are not propagated to derived classes:
 
-- ``_convert`` (``Function(cls, options)``): Converts a prototype based class ``cls`` into a jclass ([example](#converting-prototyped-classes)).
-- ``_construct`` (``Function(cls, args)``): Returns an instance of ``cls``, instantiated with ``args``. This is an ``apply``-like usage for ``new``.
+- ``_convert(cls, options)``: Converts a prototype based class *cls* into a jclass ([example](#converting-prototyped-classes)).
+- ``_construct(cls, args)``: Returns an instance of *cls*, instantiated with *args*. This is an *apply*-like usage for the *new* operator.
 
 
 #### Instances
 
 All instances have the following attributes:
 
-- ``_class`` (``Class``): The class of this instance
+- ``_class``: The class of this instance.
 
 Within instance methods, the *super* method is always referenced as ``_super``. You can access them by making your instance method a named function ([example](#simple-inheritance)).
 

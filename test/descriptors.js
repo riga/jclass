@@ -1,9 +1,9 @@
 var assert = require("assert"),
-    Class  = require("../index.js");
+    JClass = require("../index.js");
 
 
 // initialize objects to test
-var MyClass = Class._extend({
+var MyClass = JClass._extend({
 
   // accessor descriptor
   foo: {

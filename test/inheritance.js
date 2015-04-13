@@ -1,9 +1,9 @@
 var assert = require("assert"),
-    Class  = require("../index.js");
+    JClass = require("../index.js");
 
 
 // initialize objects to test
-var Cat = Class._extend({
+var Cat = JClass._extend({
   // instance members
 
   init: function(color) {
@@ -87,14 +87,14 @@ describe("Inheritance", function() {
   });
 
   describe("#sub-class-1", function() {
-    it("should return the true if Cat is in Class' subclasses", function() {
-      assert.equal(true, !!~Class._subClasses.indexOf(Cat));
+    it("should return the true if Cat is in JClass' subclasses", function() {
+      assert.equal(true, !!~JClass._subClasses.indexOf(Cat));
     });
   });
 
   describe("#extends-1", function() {
-    it("should return true if Lion extends Class", function() {
-      assert.equal(true, Lion._extends(Class));
+    it("should return true if Lion extends JClass", function() {
+      assert.equal(true, Lion._extends(JClass));
     });
   });
 

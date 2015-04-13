@@ -1,12 +1,12 @@
 var assert       = require("assert"),
     EventEmitter = require("events").EventEmitter,
-    Class        = require("../index.js");
+    JClass       = require("../index.js");
 
 
 // initialize objects to test
 EventEmitter.prototype.someMember = 123;
 
-var Emitter = Class._convert(EventEmitter);
+var Emitter = JClass._convert(EventEmitter);
 
 var emitter = new Emitter();
 

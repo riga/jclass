@@ -1,66 +1,118 @@
-/*!
- * jclass v1.1.3
+/**
+ * jclass v1.1.4
  * https://github.com/riga/jclass
  *
- * Marcel Rieger, 2014
+ * Marcel Rieger, 2015
  * MIT licensed, http://www.opensource.org/licenses/mit-license
  */
 
 (function(factory) {
-  if (typeof define === "function" && define.amd) {
+
+  /**
+   * Make jclass available in any context.
+   */
+
+  if (typeof(define) == "function" && define.amd) {
     // AMD
     define([], factory);
-  } else if (typeof exports === "object") {
+
+  } else if (typeof(exports) == "object") {
     // CommonJS
     exports = factory();
+
     if (typeof module === "object") {
-      // nodejs
+      // NodeJS
       module.exports = exports;
     }
+
   } else if (window) {
     // Browser
-    window.Class = factory();
-  } else if (typeof console === "object" && console.error instanceof Function) {
+    window.JClass = factory();
+
+  } else if (typeof(console) == "object" && console.error instanceof Function) {
     // error case
     console.error("cannot determine environment");
   }
 
 })(function() {
 
-  // helpers
+  /**
+   * Helper functions.
+   */
+
+  /**
+   * Checks whether a passed object is a function.
+   *
+   * @param obj - The object to check.
+   * @returns {boolean}
+   */
   var isFn = function(obj) {
     return obj instanceof Function;
   };
-  var isUndef = function(obj) {
-    return obj === undefined;
-  };
-  var isObj = function(obj) {
-    return typeof obj === "object";
-  };
+
+  /**
+   * Checks whether a passed object is a descriptor.
+   *
+   * @param obj - The object to check.
+   * @returns {boolean}
+   */
   var isDescr = function(obj) {
-    return isObj(obj) && obj.descriptor === true;
+    // object check and strict boolean comparison of "descriptor" attribute
+    return typeof(obj) == "object" && obj.descriptor === true;
   };
+
+  /**
+   * Extends a target object by one or more source objects with shallow key comparisons. Note that
+   * the extension is done in-place.
+   *
+   * @param {object} target - The target object to extend.
+   * @param {...object} source - Source objects.
+   * @returns {object} The extended object.
+   */
   var extend = function(target) {
-    var objs = Array.prototype.slice.call(arguments, 1);
-    var i, obj, key, originalValue;
-    for (i in objs) {
-      obj = objs[i];
-      if (!isObj(obj)) return;
-      for (key in obj) {
-        originalValue = target[key];
-        if (isUndef(originalValue)) target[key] = obj[key];
+    var sources = Array.prototype.slice.call(arguments, 1);
+
+    // loop through all sources
+    for (var i in sources) {
+      var source = sources[i];
+
+      // object check
+      if (typeof(source) != "object") {
+        continue;
+      }
+
+      // loop through all source attributes
+      for (var key in source) {
+        target[key] = source[key];
       }
     }
+
     return target;
   };
 
-  // default options
+
+  /**
+   * Default options.
+   */
+
   var defaultOptions = {
+    // internal object for indicating that class objects don't have a class object themselves,
+    // may not be used by users
     _isClassObject: false
   };
 
+
+  /**
+   * Flags.
+   */
+
   // flag to distinguish between prototype and class instantiation 
   var initializing = false;
+
+
+  /**
+   * Base class definition.
+   */
 
   // empty BaseClass implementation
   var BaseClass = function(){};
@@ -68,31 +120,50 @@
   // add the _subClasses entry
   BaseClass._subClasses = [];
 
-  // extend mechanism
+
+  /**
+   * Extend mechanism. Returns a derived class.
+   *
+   * @param {object} instanceMembers - Members that will be owned by instances.
+   * @param {object} classMembers - Members that will be owned by the class itself.
+   * @returns {JClass}
+   */
   BaseClass._extend = function(instanceMembers, classMembers, options) {
 
     // default arguments
-    if (isUndef(instanceMembers)) instanceMembers = {};
-    if (isUndef(classMembers))    classMembers    = {};
-    if (isUndef(options))         options         = {};
+    if (instanceMembers === undefined) {
+      instanceMembers = {};
+    }
+    if (classMembers === undefined) {
+      classMembers = {};
+    }
+    if (options === undefined) {
+      options = {};
+    }
 
     // mixin default options
-    extend(options, defaultOptions);
+    options = extend({}, defaultOptions, options);
+
+
+    // sub class dummy constructor
+    var JClass = function() {
+      // nothing happens here when we are initializing
+      if (initializing) {
+        return;
+      }
+
+      // store a reference to the class itself
+      this._class = JClass;
+
+      // all construction is actually done in the init method
+      if (this.init instanceof Function) {
+        this.init.apply(this, arguments);
+      }
+    };
+
 
     // alias for readability
     var SuperClass = this;
-
-    // sub class dummy constructor
-    var Class = function() {
-      // nothing happens here when we are initializing
-      if (initializing) return;
-
-      // store a reference to the class itself
-      this._class = Class;
-
-      // all construction is actually done in the init method
-      if (this.init) this.init.apply(this, arguments);
-    };
 
     // create an instance of the super class via new
     // the flag sandwich prevents a call to the init method
@@ -104,27 +175,45 @@
     var superPrototype = SuperClass.prototype;
 
     // the instance of the super class is our new prototype
-    Class.prototype = prototype;
+    JClass.prototype = prototype;
 
     // enforce the constructor to be what we expect
-    // this will invoke the init method (see above)
-    Class.prototype.constructor = Class;
+    // calls to the constructor will invoke the init method (see above)
+    JClass.prototype.constructor = JClass;
 
     // store a reference to the super class
-    Class._superClass = SuperClass;
+    JClass._superClass = SuperClass;
 
     // store references to all extending classes
-    Class._subClasses = [];
-    SuperClass._subClasses.push(Class);
+    JClass._subClasses = [];
+    SuperClass._subClasses.push(JClass);
 
-    // make this class extendable
-    Class._extend = SuperClass._extend;
+    // make this class extendable as well
+    JClass._extend = SuperClass._extend;
 
-    // propagate instance members directly to the created protoype
+
+    // _extends returns true if the class itself extended "target"
+    // in any hierarchy, e.g. every class extends "JClass" itself
+    JClass._extends = function(target) {
+      // this function operates recursive, so stop when the super class is our BaseClass
+      if (this._superClass == BaseClass) {
+        return false;
+      }
+
+      // success case
+      if (target == this._superClass || target == BaseClass) {
+        return true;
+      }
+
+      // continue with the next super class
+      return this._superClass._extends(target);
+    };
+
+
+    // propagate instance members directly to the created protoype,
     // the member is either a normal member or a descriptor
-    var key, member, superMember;
-    for (key in instanceMembers) {
-      member = instanceMembers[key];
+    for (var key in instanceMembers) {
+      var member = instanceMembers[key];
 
       if (isDescr(member)) {
         // descriptor -> define the property
@@ -136,82 +225,78 @@
 
         // if both member and the super member are distinct functions
         // add the super member to the member as "_super"
-        superMember = superPrototype[key];
+        var superMember = superPrototype[key];
         if (isFn(member) && isFn(superMember) && member !== superMember) {
           member._super = superMember;
         }
       }
     }
 
-    // propagate class members to the _members instance
+
+    // propagate class members to the _members object
     if (!options._isClassObject) {
-      // find the super class of the _members instance 
-      var ClassMembersSuperClass = isUndef(SuperClass._members) ?
+      // try to find the super class of the _members object 
+      var ClassMembersSuperClass = SuperClass._members === undefined ?
         BaseClass : SuperClass._members._class;
 
       // create the actual class of the _members instance
-      var opts = { _isClassObject: true };
+      // with an updated version of our options
+      var opts = extend({}, options, { _isClassObject: true });
       var ClassMembersClass = ClassMembersSuperClass._extend(classMembers, {}, opts);
 
-      // create the instance
-      Class._members = new ClassMembersClass();
+      // create the _members instance
+      JClass._members = new ClassMembersClass();
     }
 
-    // _extends returns true if the class itself extended "target"
-    // in any hierarchy, e.g. every class inherits "Class" itself
-    Class._extends = function(target) {
-      if (this._superClass == BaseClass) return false;
-      if (target == this._superClass || target == BaseClass) return true;
-      return this._superClass._extends(target);
-    };
 
-    return Class;
+    // return the new class
+    return JClass;
   };
 
 
-  // converts arbitrary protoype-style classes to our Class definition
+  /**
+   * Converts arbitrary protoype-style classes to our JClass definition.
+   *
+   * @param {function} cls - The class to convert.
+   * @returns {JClass}
+   */
   BaseClass._convert = function(cls, options) {
-
-    // the properties consist of the class' prototype
-    var instanceMembers = cls.prototype;
-
-    // add the constructor function
-    instanceMembers.init = function() {
-      var self = this;
-
-      // simply create an instance of our target class
-      this._origin = BaseClass._construct(cls, arguments);
-
-      // add properties for each own property in _origin
-      Object.keys(this._origin).forEach(function(key) {
-        if (!self._origin.hasOwnProperty(key)) {
-          return;
-        }
-        Object.defineProperty(self, key, {
-          get: function() {
-            return self._origin[key];
-          }
-        });
-      });
-    };
-
-    // finally, create and return our new class
-    return BaseClass._extend(instanceMembers, {}, options);
+    return BaseClass._extend(cls.prototype, {}, options);
   };
 
 
-  // returns an instance of a class with a list of arguments
-  // that are passed to the constructor 
-  // this provides an apply-like constructor usage
+  /**
+   * Returns an instance of a class with a list of arguments. This provides an apply-like
+   * constructor usage. Note that this approach does not work with native constructors (e.g. String
+   * or Boolean).
+   *
+   * @param {Class|JClass} cls - The class to instantiate. This may be a JClass or a prototype-based
+   *   class.
+   * @param {array} [args=[]] - Arguments to pass to the constructor.
+   * @returns {instance}
+   */
   BaseClass._construct = function(cls, args) {
+    // empty default args
+    if (args === undefined) {
+      args = [];
+    }
+
+    // create a class wrapper that calls cls like a function
     var Class = function() {
-      return cls.apply(this, args || []);
+      return cls.apply(this, args);
     };
 
+    // copy the prototype
     Class.prototype = cls.prototype;
 
+    // return a new instance
     return new Class();
   };
+
+
+  /**
+   * Return the BaseClass.
+   */
 
   return BaseClass;
 });
