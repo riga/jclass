@@ -158,6 +158,7 @@ emitter.emit("topic", ...);
 });
 ```
 
+The instance of the (original) prototyped class is stored as ``_origin`` in each jclass instance.
 
 
 ## API

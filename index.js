@@ -1,5 +1,5 @@
 /**
- * jclass v1.1.4
+ * jclass v1.1.6
  * https://github.com/riga/jclass
  *
  * Marcel Rieger, 2015
@@ -261,7 +261,30 @@
    * @returns {JClass}
    */
   BaseClass._convert = function(cls, options) {
-    return BaseClass._extend(cls.prototype, {}, options);
+    // the properties consist of the class' prototype
+    var instanceMembers = cls.prototype;
+
+    // add the constructor function
+    instanceMembers.init = function() {
+      // simply create an instance of our target class
+      var origin = this._origin = BaseClass._construct(cls, arguments);
+
+      // add properties for each own property in _origin
+      for (var key in instanceMembers) {
+        if (!this._origin.hasOwnProperty(key)) {
+          continue;
+        }
+
+        Object.defineProperty(this, key, {
+          get: function() {
+            return origin[key];
+          }
+        });
+      }
+    };
+
+    // finally, create and return our new class
+    return BaseClass._extend(instanceMembers, {}, options);
   };
 
 
