@@ -1,5 +1,5 @@
 /**
- * jclass v1.1.6
+ * jclass v1.1.7
  * https://github.com/riga/jclass
  *
  * Marcel Rieger, 2015
@@ -270,9 +270,9 @@
       var origin = this._origin = BaseClass._construct(cls, arguments);
 
       // add properties for each own property in _origin
-      for (var key in instanceMembers) {
-        if (!this._origin.hasOwnProperty(key)) {
-          continue;
+      Object.keys(origin).forEach(function(key) {
+        if (!origin.hasOwnProperty(key)) {
+          return;
         }
 
         Object.defineProperty(this, key, {
@@ -280,7 +280,7 @@
             return origin[key];
           }
         });
-      }
+      }, this);
     };
 
     // finally, create and return our new class
