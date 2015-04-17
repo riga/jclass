@@ -1,6 +1,6 @@
 # jclass
 
-![](https://nodei.co/npm/jclass.png?downloads=True&stars=True)
+[![jclass](https://nodei.co/npm/jclass.png?downloads=True&stars=True)](https://www.npmjs.com/package/jclass)
 
 *jclass* started as a port of [John Resig's lightweight OO inheritance model](http://ejohn.org/blog/simple-javascript-inheritance/). However, this implementation is faster as it avoids threefold method wrapping (see [here](http://techblog.netflix.com/2014/05/improving-performance-of-our-javascript.html)). In addition, it provides class members, property descriptors, conversion of prototype-based classes and various conveniences.
 
