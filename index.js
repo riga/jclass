@@ -51,17 +51,6 @@
   };
 
   /**
-   * Checks whether a passed object is a descriptor.
-   *
-   * @param obj - The object to check.
-   * @returns {boolean}
-   */
-  var isDescr = function(obj) {
-    // object check and strict boolean comparison of "descriptor" attribute
-    return typeof(obj) == "object" && obj.descriptor === true;
-  };
-
-  /**
    * Extends a target object by one or more source objects with shallow key comparisons. Note that
    * the extension is done in-place.
    *
@@ -119,6 +108,9 @@
 
   // add the _subClasses entry
   BaseClass._subClasses = [];
+
+  // empty init method
+  BaseClass.prototype.init = function(){};
 
 
   /**
@@ -213,14 +205,19 @@
     // propagate instance members directly to the created protoype,
     // the member is either a normal member or a descriptor
     for (var key in instanceMembers) {
-      var member = instanceMembers[key];
+      var property = Object.getOwnPropertyDescriptor(instanceMembers, key);
+      var member   = property.value;
 
-      if (isDescr(member)) {
-        // descriptor -> define the property
+      // descriptor flag set?
+      if (typeof(member) == "object" && member.descriptor) {
         Object.defineProperty(prototype, key, member);
 
+      // getter/setter syntax
+      } else if (!("value" in property) && ("set" in property || "get" in property)) {
+        Object.defineProperty(prototype, key, property);
+
+      // normal member, simple assignment
       } else {
-        // normal member -> simple assignment
         prototype[key] = member;
 
         // if both member and the super member are distinct functions

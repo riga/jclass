@@ -118,7 +118,12 @@ Cat._members.getFamily()); // "Felidae", same as Cat._members.family
 
 #### Property Descriptors
 
-All instance and class members given to ``_extend`` can also be applied as property descriptors that are passed to [``Object.defineProperty``](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty). All you need to do is define members as objects and add a property ``descriptor: true``. Both, accessor-type and data-type descriptors are supported.
+All instance and class members given to ``_extend`` can also be applied as property descriptors that are passed to [``Object.defineProperty``](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty). There are two approaches.
+
+
+##### Descriptors
+
+Define members as objects and add a property ``descriptor: true``. Both, accessor-type and data-type descriptors are supported.
 
 ```javascript
 var JClass = require("jclass");
@@ -136,7 +141,32 @@ var MyClass = JClass._extend({
 
 var myInstance = new MyClass();
 console.log(myInstance.someKey); // "some value"
+```
 
+##### Getter/Setter Syntax
+
+Use getter/setter syntax. This is equivalent to the accessor-type descriptor definition.
+
+```javascript
+var JClass = require("jclass");
+
+var MyClass = JClass._extend({
+
+  set someKey(value) {
+    // do sth with "value", e.g.
+    this._someKey = value;
+  },
+  
+  get someKey() {
+    // do sth to return a value, e.g.
+    return this._someKey * 2;
+  }
+
+});
+
+var myInstance = new MyClass();
+myInstance.someKey = 123;
+console.log(myInstance.someKey); // 246
 ```
 
 
