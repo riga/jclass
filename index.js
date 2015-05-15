@@ -1,5 +1,5 @@
 /**
- * jclass v1.1.7
+ * jclass v1.1.9
  * https://github.com/riga/jclass
  *
  * Marcel Rieger, 2015
