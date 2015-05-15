@@ -44,7 +44,15 @@ var MyClass = JClass._extend({
   }
 });
 
-var myInstance = new MyClass();
+var MySubClass = MyClass._extend({
+  get twice() {
+    var _super = JClass._superDescriptor(this, "twice");
+    return _super.get.call(this) * 4;
+  }
+});
+
+var myInstance    = new MyClass();
+var mySubInstance = new MySubClass();
 
 
 
@@ -78,6 +86,12 @@ describe("Descriptors", function() {
   describe("#getter-5", function() {
     it("should return the value of bar", function() {
       assert.equal("some value", myInstance.bar);
+    });
+  });
+
+  describe("#getter-6", function() {
+    it("should return the value of someValue times 8", function() {
+      assert.equal(800, mySubInstance.twice);
     });
   });
 

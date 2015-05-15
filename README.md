@@ -75,6 +75,10 @@ console.log(GrumpyCat._extends(Cat)); // true, same as GrumpyCat._superClass == 
 console.log(GrumpyCat._extends(JClass)); // true
 ```
 
+##### Note
+
+In the ``GrumpyCat.init`` constructor method, the super class' constructor is invoked as well via ``init._super.call``. ``init`` is the method itself, ``_super`` references the super class's method. This is achieved using *function declaration*. For more info, see [this link](https://javascriptweblog.wordpress.com/2010/07/06/function-declarations-vs-function-expressions/).
+
 
 #### Class members
 
@@ -169,6 +173,31 @@ myInstance.someKey = 123;
 console.log(myInstance.someKey); // 246
 ```
 
+##### Accessing Super Class' Property Descriptors
+
+When extending a class that implements property descriptors, you cannot access its *super* definitions the normal way, i.e. via the ``_super`` attribute. Instead, you have to do a little trick (based on ``MyClass`` above):
+
+```
+var JClass = require("jclass");
+
+var MyClass = ...
+
+var MySubClass = MyClass._extend({
+    
+    get someKey() {
+        var _super = JClass._superDescriptor(this, "someKey");
+        return _super.get.call(this) * 3;
+    }
+
+});
+
+
+var mySubInstance = new MySubClass();
+
+mySubInstance.someKey = 1;
+console.log(mySubInstance.someKey); // 6
+```
+
 
 #### Converting Prototyped Classes
 
@@ -208,6 +237,7 @@ The base ``JClass`` has additional attributes that are not propagated to derived
 
 - ``_convert(cls, options)``: Converts a prototype based class *cls* into a jclass ([example](#converting-prototyped-classes)).
 - ``_construct(cls, args)``: Returns an instance of *cls*, instantiated with *args*. This is an *apply*-like usage for the *new* operator.
+- ``_superDescriptor(JClass|instance, prop)``: Returns the property descriptor *prop* of the super class. The first argument can be either a jclass or an instance of a jclass.
 
 
 #### Instances

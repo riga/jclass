@@ -315,6 +315,29 @@
 
 
   /**
+   * Returns a property descriptor of the super class.
+   *
+   * @param {JClass|instance} cls - A JClass or an instance of a JClass to retrieve the property
+   *   descriptor from.
+   * @param {string} prop - The name of the property descriptor to get.
+   * @returns {object}
+   */
+  BaseClass._superDescriptor = function(cls, prop) {
+    // if cls is an instance, use its class
+    if ("_class" in cls && cls instanceof cls._class) {
+      cls = cls._class;
+    }
+
+    // a JClass?
+    if ("_extends" in cls && cls._extends instanceof Function && cls._extends(this)) {
+      return Object.getOwnPropertyDescriptor(cls._superClass.prototype, prop);
+    } else {
+      return undefined;
+    }
+  };
+
+
+  /**
    * Return the BaseClass.
    */
 
