@@ -2,7 +2,7 @@
 
 [![jclass](https://nodei.co/npm/jclass.png?downloads=True&stars=True)](https://www.npmjs.com/package/jclass)
 
-*jclass* started as a port of [John Resig's lightweight OO inheritance model](http://ejohn.org/blog/simple-javascript-inheritance/). However, this implementation is faster as it avoids threefold method wrapping (see [here](http://techblog.netflix.com/2014/05/improving-performance-of-our-javascript.html)). In addition, it provides class members, property descriptors, conversion of prototype-based classes and various conveniences.
+*jclass* started as a port of [John Resig's lightweight OO inheritance model](http://ejohn.org/blog/simple-javascript-inheritance/). However, this implementation is faster as it avoids threefold method wrapping (see [this link](http://techblog.netflix.com/2014/05/improving-performance-of-our-javascript.html)). In addition, it provides class members, property descriptors, conversion of prototype-based classes and various conveniences.
 
 *jclass* has no dependencies and works in most import environments:
 RequireJS (AMD), CommonJS, NodeJs and web browsers.
@@ -173,7 +173,7 @@ myInstance.someKey = 123;
 console.log(myInstance.someKey); // 246
 ```
 
-##### Accessing Super Class' Property Descriptors
+##### Accessing Super Property Descriptors
 
 When extending a class that implements property descriptors, you cannot access its *super* definitions the normal way, i.e. via the ``_super`` attribute. Instead, you have to do a little trick (based on ``MyClass`` above):
 
@@ -186,6 +186,12 @@ var MySubClass = MyClass._extend({
     
     get someKey() {
         var _super = JClass._superDescriptor(this, "someKey");
+        // same as
+        // var _super = JClass._superDescriptor(this._class, "someKey");
+        // same as
+        // var _super = JClass._superDescriptor(MySubClass, "someKey");
+        // alias for
+        // var _super = Object.getOwnPropertyDescriptor(MyClass.prototype, "someKey");
         return _super.get.call(this) * 3;
     }
 
