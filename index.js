@@ -20,7 +20,7 @@
     // CommonJS
     exports = factory();
 
-    if (typeof module === "object") {
+    if (typeof(module) == "object") {
       // NodeJS
       module.exports = exports;
     }
