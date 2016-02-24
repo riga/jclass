@@ -209,7 +209,7 @@
       var member   = property.value;
 
       // descriptor flag set?
-      if (typeof(member) == "object" && member.descriptor) {
+      if (member !== null && typeof(member) == "object" && member.descriptor) {
         Object.defineProperty(prototype, key, member);
 
       // getter/setter syntax

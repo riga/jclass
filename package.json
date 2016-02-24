@@ -1,7 +1,7 @@
 {
     "name": "jclass",
     "preferGlobal": false,
-    "version": "1.2.0",
+    "version": "1.2.1",
     "author": "Marcel Rieger <marcelrieger@icloud.com>",
     "description": "Advanced but lightweight and fast Javascript inheritance model providing class members and prototype conversion.",
     "repository": {
