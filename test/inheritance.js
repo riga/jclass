@@ -39,6 +39,10 @@ var Lion = Cat._extend({
     return "Roooaaar!";
   },
 
+  myFamily: function() {
+    return this._class._members.getFamily();
+  }
+
 }, {
   // class members
 
@@ -83,6 +87,12 @@ describe("Inheritance", function() {
   describe("#class-members-4", function() {
     it("should return the family of Lion", function() {
       assert.equal("Felidae", Lion._members.getFamily());
+    });
+  });
+
+  describe("#class-members-5", function() {
+    it("should return the family of Lion via an instance call", function() {
+      assert.equal("Felidae", lion.myFamily());
     });
   });
 
