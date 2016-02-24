@@ -241,6 +241,9 @@
       var opts = extend({}, options, { _isClassObject: true });
       var ClassMembersClass = ClassMembersSuperClass._extend(classMembers, {}, opts);
 
+      // store the actual JClass in ClassMembersClass
+      ClassMembersClass._instanceClass = JClass;
+
       // create the _members instance
       JClass._members = new ClassMembersClass();
     }

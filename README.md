@@ -107,9 +107,12 @@ var Cat = JClass._extend({
   family: "Felidae",
 
   getFamily: function() {
-    console.log(this.family);
-    // same as
-    // console.log(Cat._members.family);
+    return this.family;
+  },
+  
+  reproduce: function(color) {
+    // create a new cat ;)
+    return new this._class._instanceClass(color);
   }
 
 });
@@ -237,6 +240,10 @@ Classes have the following attributes:
 - ``_superClass``: The super class (not available for the base ``JClass``).
 - ``_subClasses``: An array containing all (**directly inheriting**) sub classes.
 - ``_members``: A jclass instance holding the class members ([example](#class-members)).
+
+Only for the class that holds class members:
+
+- ``_instanceClass``: The original class holding instance members.
 
 
 The base ``JClass`` has additional attributes that are not propagated to derived classes:
